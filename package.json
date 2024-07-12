@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "gsap": "^3.12.5",
-    "reactjs-popup": "^2.0.6"
-  }
-}
