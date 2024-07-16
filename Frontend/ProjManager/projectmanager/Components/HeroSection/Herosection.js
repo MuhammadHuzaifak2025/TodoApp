@@ -16,7 +16,7 @@ const Herosection = ({ User }) => {
   }, [User]);
 
   return (
-    <div className="flex justify-between mt-7 mr-5 font-semibold text-xl items-baseline">
+    <div className="flex justify-between mr-5 font-semibold text-xl items-baseline">
       <div>
         <h1
           className={` ${UserName === " " ? "hidden" : "block"}`}

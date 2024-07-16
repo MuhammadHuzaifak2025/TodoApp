@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "../Components/NavBar/Navbar";
-
+import Herosection from "@/Components/HeroSection/Herosection";
+import Taskheader from "@/Components/Task/Taskheader";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,6 +17,10 @@ export default function RootLayout({ children }) {
         <header>
           <NavBar />
         </header>
+        <div className="text-white">
+          <Herosection User="Huzaifa" />
+          <Taskheader />
+          </div>
         <div >
           {children}
         </div>

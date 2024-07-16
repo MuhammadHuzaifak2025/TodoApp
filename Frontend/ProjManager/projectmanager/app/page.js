@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <div className="text-white">
       {/* <Navbar /> */}
-      <Herosection User="Huzaifa" />
-      <Taskheader />
+      {/* <Herosection User="Huzaifa" />
+      <Taskheader /> */}
       <ListHandler />
     </div>
   );
