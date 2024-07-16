@@ -10,6 +10,8 @@ const Details = ({
   setlistSpread,
   AllViewHandler,
   Color,
+  Estimated_Time,
+  Due_date
 }) => {
   const Spread = () => {
     setlistSpread(true);
@@ -24,10 +26,12 @@ const Details = ({
   const SaveChanges = () => {
     SetEditBool(false);
   };
+
   return (
     <motion.div
-      dragConstraints={{ left: 0, right: 0 }}
-      className="border-4 rounded-2xl h-full mx-auto p-4 my-4"
+      drag
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      className="border-4 rounded-2xl h-full mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin"
       style={{ borderColor: Color }}
     >
       <form>
@@ -39,7 +43,7 @@ const Details = ({
             </span>
             <span className={`${EditBool ? "pl-1" : "hidden"}`}>
               <input
-                className="bg-black  w-40 h-8 text-left items-center rounded-xl focus:border-blue-500"
+                className="bg-black w-40 h-8 text-left items-center rounded-xl focus:border-blue-500"
                 type="text"
                 defaultValue={TaskName}
               />
@@ -53,7 +57,7 @@ const Details = ({
             </span>
             <span className={`${EditBool ? "text-sm " : "hidden"}`}>
               <input
-                className="bg-black w-20 text-sm  rounded-xl h-6  items-center focus:border-blue-500"
+                className="bg-black w-20 text-sm rounded-xl h-6 items-center focus:border-blue-500"
                 type="text"
                 defaultValue={Status}
               />
@@ -62,16 +66,14 @@ const Details = ({
         </div>
         <div>
           <div className="flex justify-start">
-            <p className="p-0 m-0 pl-4">Estimated Time: </p>
-            <p className="p-0 m-0 pl-4">Due Date: </p>
+            <p className="p-0 m-0 pl-4">Estimated Time: {Estimated_Time} </p>
+            <p className="p-0 m-0 pl-4">Due Date: {Due_date}</p>
           </div>
           <div className="text-left m-3 pt-3 font-semibold h-36 overflow-y-hidden overflow-x-hidden pr-3 scrollbar-thin">
             <span className={`${EditBool ? "hidden" : ""}`}>
               {"Description " + Description}
             </span>
-            <span
-              className={`${EditBool ? "pl-1 overflow-x-hidden" : "hidden"}`}
-            >
+            <span className={`${EditBool ? "pl-1 overflow-x-hidden" : "hidden"}`}>
               <textarea
                 className="text-wrap bg-black p-1 w-full rounded-xl h-full overflow-x-hidden text-left scrollbar-thin items-center focus:border-blue-500"
                 defaultValue={"Description " + Description}
@@ -82,21 +84,19 @@ const Details = ({
       </form>
       <div className="py-5 flex justify-start ml-3">
         <button
-          className={`${
-            !EditBool
-              ? "hidden"
-              : "w-2/12 mr-3 border-2 border-[#56ff2c] pr-4 text-xl pl-4 pt-1 pb-1 rounded-md text-center font-bold hover:bg-[#56ff2cdc]"
-          }`}
+          className={`${!EditBool
+            ? "hidden"
+            : "w-2/12 mr-3 border-2 border-[#56ff2c] pr-4 text-xl pl-4 pt-1 pb-1 rounded-md text-center font-bold hover:bg-[#56ff2cdc]"
+            }`}
           onClick={SaveChanges}
         >
           Save
         </button>
         <button
-          className={`${
-            EditBool
-              ? "hidden"
-              : "w-2/12 mr-3 border-2 border-[#ffbd03] pr-4 text-xl pl-4 pt-1 pb-1 rounded-md text-center font-bold hover:bg-[#ffbd03]"
-          }`}
+          className={`${EditBool
+            ? "hidden"
+            : "w-2/12 mr-3 border-2 border-[#ffbd03] pr-4 text-xl pl-4 pt-1 pb-1 rounded-md text-center font-bold hover:bg-[#ffbd03]"
+            }`}
           onClick={Editable}
         >
           Edit

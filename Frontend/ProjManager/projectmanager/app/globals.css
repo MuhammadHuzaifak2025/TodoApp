@@ -2,28 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  /* Convert comma-separated values into single values */
-  --foreground-color: rgb(var(--foreground-rgb));
-  --background-start-color: rgb(var(--background-start-rgb));
-  --background-end-color: rgb(var(--background-end-rgb));
-
-  color: var(--foreground-color);
-  background: linear-gradient(to bottom, transparent, var(--background-end-color)) var(--background-start-color);
+  background-color: black;
+  text-decoration-color: white;
+  font:white;
 }
 
 
@@ -31,8 +13,4 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-.scrollbar::-webkit-scrollbar-track{
-  scrollbar-color: red green;
 }
