@@ -1,6 +1,6 @@
 const asynchandler = (reuqesthandler) => {
-  (req, res, next) => {
-    Promise.resolve(reuqesthandler(res, req, next)).catch((error) => {
+  return (req, res, next) => {
+    Promise.resolve(reuqesthandler(req, res, next)).catch((error) => {
       next(error);
     });
   };
