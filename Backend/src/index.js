@@ -9,12 +9,14 @@ import { SyncAllModels, VerifyConnection } from "./db/index.js";
 VerifyConnection()
   .then(() => {
 
-    app.listen(1000, () => {
-      console.log("Listening on port 1000");
+    app.listen(8000, () => {
+      console.log("Listening on port 8000");
     });
-
-
+    
     SyncAllModels();
+
+    
+
   })
   .catch((err) => {
     console.error("Unable to connect to the database:", err);

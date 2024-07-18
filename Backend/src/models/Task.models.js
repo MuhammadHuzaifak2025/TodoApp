@@ -33,17 +33,8 @@ const Task = sequelize.define(
     },
   },
   {
-    tableName: "task",
+    tableName: "taskS",
   }
 );
-
-(async () => {
-  try {
-    await sequelize.sync();
-    console.log("task table has been created.");
-  } catch (syncError) {
-    console.error("Error creating task table:", syncError);
-  }
-})();
 
 export default Task;
