@@ -1,23 +1,53 @@
-import mysql from "mysql2";
+import Sequelize from "sequelize";
 import dotenv from "dotenv";
 
-const pool = mysql
-  .createPool({
-    host: process.env.todo_HOST,
-    user: process.env.todo_USER,
-    password: process.env.todo_PASSWORD,
-    database: process.env.todo_DATABASENAME,
-  })
-  .promise();
+// Load environment variables from .env file
+dotenv.config();
 
-async function closePool() {
-  try {
-    await pool.end();
-    console.log("Database pool closed successfully.");
-  } catch (error) {
-    console.error("Error closing database pool:", error);
+const sequelize = new Sequelize(
+  process.env.todo_DATABASENAME,
+  process.env.todo_USER,
+  process.env.todo_PASSWORD,
+  {
+    dialect: "mysql",
+    pool: {
+      max: 5,
+      idle: 30000,
+      acquire: 60000,
+    },
   }
-}
+);
 
-export default pool;
-export { closePool };
+const VerifyConnection = () => {
+  return new Promise((resolve, reject) => {
+    sequelize
+      .authenticate()
+      .then(() => {
+        console.log("Connection has been established successfully.");
+        resolve();
+      })
+      .catch((error) => {
+        console.error("Unable to connect to the database:", error);
+        reject(error);
+      });
+  });
+};
+
+
+const SyncAllModels = () => {
+  return new Promise((resolve, reject) => {
+    sequelize
+      .sync()
+      .then(() => {
+        console.log("All tables have been created.");
+        resolve();
+      })
+      .catch((syncError) => {
+        console.error("Error creating tables:", syncError);
+        reject(syncError);
+      });
+  });
+};
+
+export default sequelize;
+export { SyncAllModels, VerifyConnection };

@@ -1,23 +1,21 @@
 import dotenv from "dotenv";
-import pool from "./db/index.js";
+dotenv.config();
+
+import sequelize from "./db/index.js";
 import app from "./app.js";
+import { SyncAllModels, VerifyConnection } from "./db/index.js";
 
-dotenv.config({
-  path: "../",
-});
-
-await pool
-  .query("SELECT 1")
+// Verify the database connection
+VerifyConnection()
   .then(() => {
-    app.listen(process.env.PORT || 5000, () => {
-      console.log("Hello World");
-    });
-    app.on(error, (error) => {
-      console.log("Process Terminated Error: ", error);
+
+    app.listen(1000, () => {
+      console.log("Listening on port 1000");
     });
 
-    app.route("api/todo/", TodoRoutes);
+
+    SyncAllModels();
   })
-  .catch((error) => {
-    console.error("Error connecting to the database:", error.message);
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
   });
