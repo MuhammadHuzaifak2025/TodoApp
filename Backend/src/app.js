@@ -31,7 +31,7 @@ app.use(cookieparser());
 import UserRouter from "./routes/user.router.js";
 
 
-app.use("/users", UserRouter)
+app.use("/api/v1", UserRouter)
 
 
 export default app;

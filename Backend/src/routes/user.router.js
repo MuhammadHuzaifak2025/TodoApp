@@ -1,9 +1,9 @@
 import { Router } from "express";
-import Temp from '../controllers/temp.js'
+import {CreateUser} from '../controllers/temp.js'
 
 const UserRouter = Router();
 
-UserRouter.route("/temp").get(Temp)
+UserRouter.route("/").get(CreateUser)
 
 
 export default UserRouter;

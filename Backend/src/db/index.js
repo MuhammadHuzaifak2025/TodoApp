@@ -38,7 +38,7 @@ const SyncAllModels = () => {
     sequelize
       .sync()
       .then(() => {
-        console.log("All tables have been created.");
+        console.log("All tables have been Synced.");
         resolve();
       })
       .catch((syncError) => {
