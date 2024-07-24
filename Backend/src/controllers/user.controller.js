@@ -29,7 +29,7 @@ const CreateUser = asynchandler(async (req, res, next) => {
   const token = jwt.sign(
     {
       username: user.username,
-      id: user._id,
+      // id: user._id,
     },
     process.env.JWT_SECRET,
     {
