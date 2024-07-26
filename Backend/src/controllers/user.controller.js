@@ -7,6 +7,7 @@ import ApiResponse from "../utils/ResponseHandling.js";
 import ApiError from "../utils/ErrorHandling.js";
 import { where } from "sequelize";
 import GenerateToken from "../utils/GenerateToken.js";
+
 const CreateUser = asynchandler(async (req, res, next) => {
   const { firstName, username, lastName, age, email, password } = req.body;
 
@@ -29,7 +30,7 @@ const CreateUser = asynchandler(async (req, res, next) => {
   });
 
   const token = GenerateToken(user);
-
+  user.password = undefined;
   const Resp = new ApiResponse(
     200,
     { user },
@@ -48,7 +49,7 @@ const GetListUser = asynchandler(async (req, res, next) => {
 });
 
 const GetUserById = asynchandler(async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.user_id;
   const user = await User.findOne({
     where: { id: req.params.id },
     attributes: { exclude: [("password", "createdAt", "updatedAt")] },
@@ -79,4 +80,42 @@ const Authenticate_User = asynchandler(async (req, res, next) => {
   }
 });
 
-export { Authenticate_User, CreateUser, GetListUser, GetUserById };
+const UpdateUser = asynchandler(async (req, res, next) => {
+  const { firstName, username, lastName, age, email, password } = req.body;
+  let updateData = {};
+  const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
+
+  if (firstName !== undefined) updateData.firstName = firstName;
+  if (lastName !== undefined) updateData.lastName = lastName;
+  if (username !== undefined) updateData.username = username;
+  if (password !== undefined)
+    updateData.password = await bcrypt.hash(password, saltRounds);
+  if (email !== undefined) updateData.email = email;
+  if (age !== undefined) updateData.age = age;
+
+  const user = await User.update(updateData, {
+    where: { id: req.user_id },
+    returning: true,
+  });
+  const User_Obj = await User.findOne({ where: { id: req.user_id } });
+  res.json(User_Obj);
+});
+
+const DeleteUser = asynchandler(async (req, res, next) => {
+  const user = await User.findOne({ where: { id: req.user_id } });
+  if (!user) {
+    next(new ApiError(404, "User Object Not Found"));
+  }
+  await User.destroy({ where: { id: req.user_id } });
+  const Resp = new ApiResponse(200, {}, "User object Deleted");
+  res.status(200).json(Resp);
+});
+
+export {
+  Authenticate_User,
+  CreateUser,
+  GetListUser,
+  GetUserById,
+  UpdateUser,
+  DeleteUser,
+};

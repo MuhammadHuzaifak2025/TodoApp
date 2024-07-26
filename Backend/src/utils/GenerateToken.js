@@ -3,10 +3,11 @@ import jwt from "jsonwebtoken";
 const GenerateToken = (user) => {
   if (!user) return null;
   let token;
+  console.log(user);
   return (token = jwt.sign(
     {
       username: user.username,
-      // id: user._id,
+      id: user.id,
     },
     process.env.JWT_SECRET,
     {
