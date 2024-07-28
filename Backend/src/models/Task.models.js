@@ -1,6 +1,6 @@
 import sequelize from "../db/index.js";
 import DataTypes from "sequelize";
-
+import User from "./User.models.js";
 const Task = sequelize.define(
   "task",
   {
@@ -8,6 +8,13 @@ const Task = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: User, // name of the target table
+        key: "id", // key in the target table
+      },
     },
     taskname: {
       type: DataTypes.STRING,
@@ -33,7 +40,7 @@ const Task = sequelize.define(
     },
   },
   {
-    tableName: "taskS",
+    tableName: "tasks",
   }
 );
 

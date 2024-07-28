@@ -1,4 +1,5 @@
-import Sequelize from "sequelize";
+// db/index.js
+import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,36 +18,14 @@ const sequelize = new Sequelize(
   }
 );
 
-const VerifyConnection = () => {
-  return new Promise((resolve, reject) => {
-    sequelize
-      .authenticate()
-      .then(() => {
-        console.log("Connection has been established successfully.");
-        resolve();
-      })
-      .catch((error) => {
-        console.error("Unable to connect to the database:", error);
-        reject(error);
-      });
-  });
-};
-
-
-const SyncAllModels = () => {
-  return new Promise((resolve, reject) => {
-    sequelize
-      .sync()
-      .then(() => {
-        console.log("All tables have been Synced.");
-        resolve();
-      })
-      .catch((syncError) => {
-        console.error("Error creating tables:", syncError);
-        reject(syncError);
-      });
-  });
+const verifyConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 };
 
 export default sequelize;
-export { SyncAllModels, VerifyConnection };
+export { verifyConnection };

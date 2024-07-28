@@ -1,4 +1,3 @@
-// import { response } from "express";
 import bcrypt from "bcrypt";
 import asynchandler from "../utils/AsyncHandler.js";
 import User from "../models/User.models.js";

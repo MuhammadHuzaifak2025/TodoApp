@@ -1,22 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import sequelize from "./db/index.js";
+import sequelize, { verifyConnection } from "./db/index.js";
 import app from "./app.js";
-import { SyncAllModels, VerifyConnection } from "./db/index.js";
+import syncModels from "./models/associations.js";
 
-// Verify the database connection
-VerifyConnection()
+verifyConnection()
   .then(() => {
-
     app.listen(8000, () => {
       console.log("Listening on port 8000");
     });
-    
-    SyncAllModels();
 
-    
-
+    syncModels();
   })
   .catch((err) => {
     console.error("Unable to connect to the database:", err);
