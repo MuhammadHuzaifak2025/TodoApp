@@ -34,7 +34,7 @@ const Task = sequelize.define(
       type: DataTypes.DATEONLY,
       allowNull: true,
     },
-    EstimatedTime: {
+    estimationdate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
