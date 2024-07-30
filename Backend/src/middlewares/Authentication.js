@@ -16,6 +16,7 @@ const Authenticate_Header = async (req, res, next) => {
 
     req.username = decoded.username;
     req.user_id = decoded.id;
+    // console.log("Authenticating User :", decoded.id);
 
     const user = await User.findOne({ where: { id: decoded.id } });
     if (!user) {

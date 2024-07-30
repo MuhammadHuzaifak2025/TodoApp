@@ -3,8 +3,8 @@ import User from "./User.models.js";
 import Task from "./Task.models.js";
 
 // Define associations
-User.hasMany(Task, { foreignKey: "userId", as: "tasks" });
-Task.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasMany(Task, { foreignKey: "userid", as: "tasks" });
+Task.belongsTo(User, { foreignKey: "userid", as: "user" });
 
 // Sync all models with associations
 const syncModels = async () => {

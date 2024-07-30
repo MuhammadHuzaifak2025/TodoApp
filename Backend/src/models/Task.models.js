@@ -9,12 +9,13 @@ const Task = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    userId: {
+    userid: {
       type: DataTypes.INTEGER,
       references: {
         model: User, // name of the target table
         key: "id", // key in the target table
       },
+      allowNull: false,
     },
     taskname: {
       type: DataTypes.STRING,
@@ -40,7 +41,7 @@ const Task = sequelize.define(
     },
   },
   {
-    tableName: "tasks",
+    tableName: "task",
   }
 );
 
