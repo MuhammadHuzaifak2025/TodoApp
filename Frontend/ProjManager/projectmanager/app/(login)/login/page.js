@@ -1,7 +1,32 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
+import axios from "axios";
+import { useEffect } from "react";
 
 const AuthPage = ({ isLogin }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const loginUser = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/user/login/",
+        {
+          username: email,
+          password: password,
+        }
+      );
+      console.log(response.data.data.token);
+      // Handle success (e.g., redirect to another page or show a success message)
+    } catch (error) {
+      setEmail("");
+      setPassword("");
+      console.log(error)
+    }
+  };
+
   return (
     <div className="relative h-screen w-screen">
       <Image
@@ -26,7 +51,7 @@ const AuthPage = ({ isLogin }) => {
           <h1 className="font-extrabold text-3xl flex items-center justify-center mb-5 mt-5">
             Project Manager
           </h1>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={loginUser}>
             <div className="flex flex-col">
               <label htmlFor="email" className="mb-2 font-semibold text-white">
                 Username
@@ -37,6 +62,8 @@ const AuthPage = ({ isLogin }) => {
                 required={true}
                 className="bg-gray-100 p-3 rounded border focus:outline-none focus:border-blue-500 text-black"
                 placeholder="Enter your Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="flex flex-col">
@@ -52,6 +79,8 @@ const AuthPage = ({ isLogin }) => {
                 required={true}
                 className="bg-gray-100 p-3 rounded border focus:outline-none focus:border-blue-500 text-black"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="flex items-center justify-between">
@@ -76,10 +105,10 @@ const AuthPage = ({ isLogin }) => {
               type="submit"
               className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded transition duration-200 hover:bg-blue-700"
             >
-              {isLogin ? "Login" : "Sign Up"}
+              {isLogin ? "Sign in" : "Login"}
             </button>
             <p className="text-center mt-4">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+              {isLogin ? "Don't have an account?" : "Don't have an account?"}{" "}
               <a
                 href={isLogin ? "/login" : "/signup"}
                 className="text-blue-600 hover:underline"
