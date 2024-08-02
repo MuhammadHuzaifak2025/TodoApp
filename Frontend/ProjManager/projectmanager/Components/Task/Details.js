@@ -31,7 +31,7 @@ const Details = ({
     <motion.div
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      className="border-4 rounded-2xl h-full mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin"
+      className="border-4 rounded-2xl max-h-fit mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin"
       style={{ borderColor: Color }}
     >
       <form>

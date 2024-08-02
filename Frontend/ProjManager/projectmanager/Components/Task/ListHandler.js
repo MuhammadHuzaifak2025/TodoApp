@@ -5,6 +5,7 @@ import AllCaughtUp from "./AllCaughtup";
 import Tasklist from "./Tasklist";
 import TempData from "./TempData";
 import { Reorder, motion } from "framer-motion";
+import Filter from "./Filter";
 
 const ListHandler = () => {
   const [allCaughtUp, SetallCaughtUp] = useState(false);
@@ -18,7 +19,7 @@ const ListHandler = () => {
       <div className={`${allCaughtUp ? "block" : "hidden"}`}>
         <AllCaughtUp />
       </div>
-      <div className="-mt-3 h-full overflow-y-auto pr-5 scrollbar-thin scrollbar-thumb-[#757474] scrollbar-track-[#3d3d3d] ">
+      <div className="-mt-3 h-[420px] overflow-y-auto pr-5 scrollbar-thin scrollbar-thumb-[#757474] scrollbar-track-[#3d3d3d] ">
         <Reorder.Group values={list} onReorder={setList}>
           {list.map((item) => (
             <Reorder.Item value={item} key={item.id} axis="y">
@@ -35,6 +36,7 @@ const ListHandler = () => {
           ))}
         </Reorder.Group>
       </div>
+      <Filter />
     </>
   );
 };
