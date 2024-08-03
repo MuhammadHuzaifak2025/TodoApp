@@ -3,11 +3,17 @@ import React, { useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
-const AuthPage = ({ isLogin }) => {
+const AuthPage = ({}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [IncorrectPass, SetIncorrectPass] = useState(false);
+  const [isLogin, SetisLogin] = useState(false);
+  const [errormessage, SetError] = useState("");
+  const RemoveError = () => {
+    SetIncorrectPass(false);
+  };
   const loginUser = async (event) => {
     event.preventDefault();
     try {
@@ -18,14 +24,22 @@ const AuthPage = ({ isLogin }) => {
           password: password,
         }
       );
-      console.log(response.data.data.token);
-      // Handle success (e.g., redirect to another page or show a success message)
+      SetisLogin(true);
+      const token = response.data.data.token;
+      document.cookie = `auth-token=${token}; path=/;`;
     } catch (error) {
+      SetIncorrectPass(true);
       setEmail("");
       setPassword("");
-      console.log(error)
+      SetError(error.message);
+      console.log(error);
     }
   };
+  useEffect(() => {
+    if (isLogin) {
+      redirect("home");
+    }
+  }, [isLogin]);
 
   return (
     <div className="relative h-screen w-screen">
@@ -51,6 +65,18 @@ const AuthPage = ({ isLogin }) => {
           <h1 className="font-extrabold text-3xl flex items-center justify-center mb-5 mt-5">
             Project Manager
           </h1>
+          <div
+            className={`${
+              IncorrectPass ? "flex items-center justify-between" : "hidden"
+            } `}
+          >
+            <h1 className="text-red-400 ml-auto mr-auto pl-6">
+              {errormessage}
+            </h1>
+            <button onClick={RemoveError} className="mr-5">
+              X
+            </button>
+          </div>
           <form className="space-y-6" onSubmit={loginUser}>
             <div className="flex flex-col">
               <label htmlFor="email" className="mb-2 font-semibold text-white">
@@ -113,7 +139,7 @@ const AuthPage = ({ isLogin }) => {
                 href={isLogin ? "/login" : "/signup"}
                 className="text-blue-600 hover:underline"
               >
-                {isLogin ? "Sign Up" : "Login"}
+                {isLogin ? "Login" : "Sign up"}
               </a>
             </p>
           </form>

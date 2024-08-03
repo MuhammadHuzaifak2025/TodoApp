@@ -5,6 +5,7 @@ import ApiError from "../utils/ErrorHandling.js";
 const Authenticate_Header = async (req, res, next) => {
   try {
     const token = req.header("auth-token");
+    console.log(token)
     if (!token) {
       throw new ApiError("Token not provided", 401);
     }
@@ -26,7 +27,7 @@ const Authenticate_Header = async (req, res, next) => {
     next();
   } catch (err) {
     return res
-      .status(err.statusCode || 400)
+      .status(err.statusCode || 401)
       .json({ error: "Invalid Token", message: err.message });
   }
 };

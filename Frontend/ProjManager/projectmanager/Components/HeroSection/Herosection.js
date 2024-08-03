@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import getCookie from "../../app/api/getcookie";
 
 const Herosection = ({ User }) => {
   const [UserName, SetUser] = useState(" ");
@@ -12,15 +14,36 @@ const Herosection = ({ User }) => {
   const formattedDate = ` ${date}/${month}/${year}`;
 
   useEffect(() => {
-    SetUser(User);
-  }, [User]);
+    const getUserDetails = async () => {
+      const authToken = getCookie("auth-token"); // Use the correct cookie name
+
+      if (authToken) {
+        try {
+          const resp = await axios.get("http://localhost:8000/api/v1/user/", {
+            headers: {
+              "auth-token": authToken, // Adjust header if necessary
+            },
+          });
+          console.log(resp.data.data);
+          SetUser(resp.data.data.firstName + " " + resp.data.data.lastName); // Assuming response contains userName
+        } catch (error) {
+          console.error(
+            "Error fetching data:",
+            error.response ? error.response.data : error.message
+          );
+        }
+      } else {
+        console.log("No auth-token cookie found");
+      }
+    };
+
+    getUserDetails();
+  }, []);
 
   return (
     <div className="flex justify-between mr-5 font-semibold text-xl items-baseline">
       <div>
-        <h1
-          className={` ${UserName === " " ? "hidden" : "block"}`}
-        >
+        <h1 className={` ${UserName === " " ? "hidden" : "block"}`}>
           Good Morning <span className="font-bold text-2xl">{UserName}</span>,
         </h1>
       </div>

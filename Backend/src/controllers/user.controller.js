@@ -50,7 +50,7 @@ const GetListUser = asynchandler(async (req, res, next) => {
 const GetUserById = asynchandler(async (req, res, next) => {
   const id = req.user_id;
   const user = await User.findOne({
-    where: { id: req.params.id },
+    where: { id: id },
     attributes: { exclude: [("password", "createdAt", "updatedAt")] },
   });
   if (!user) {
@@ -61,7 +61,25 @@ const GetUserById = asynchandler(async (req, res, next) => {
 });
 
 const Authenticate_User = asynchandler(async (req, res, next) => {
+  const token = req.header("auth-token");
+  console.log(token)
+  if (token) {
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {}
+    if (decoded) {
+      const User_Obj = await User.findOne({ where: { id: decoded.id } });
+      const Resp = new ApiResponse(
+        200,
+        { username: User_Obj.username },
+        "User Logged In"
+      );
+      res.status(200).json(Resp);
+    }
+  }
   const { username, password } = req.body;
+
   const User_Obj = await User.findOne({ where: { username: username } });
   if (!User_Obj) {
     next(new ApiError(400, "Username does not exist"));
