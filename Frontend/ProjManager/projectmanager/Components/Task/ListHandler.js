@@ -13,7 +13,8 @@ const ListHandler = () => {
   const { scrollYProgress } = useScroll();
   const [allCaughtUp, SetallCaughtUp] = useState(false);
   const [listview, Setlistview] = useState(true);
-  const [list, setList] = useState(TempData);
+  const [list, setList] = useState([]);
+  const [TaskUpdated, setTaskUpdated] = useState(true);
 
   // const update_data = () => {}
   useEffect(() => {
@@ -24,8 +25,10 @@ const ListHandler = () => {
           "http://localhost:8000/api/v1/tasks/",
           {
             headers: { "auth-token": token },
+            withCredentials: true, // Include cookies with the request
           }
         );
+        setTaskUpdated(false);
         console.log(tasklist.data);
         // console.log(TempData);
         setList(tasklist.data);
@@ -34,7 +37,7 @@ const ListHandler = () => {
       }
     };
     getTask();
-  }, []);
+  }, [TaskUpdated]);
 
   return (
     <>
@@ -49,9 +52,11 @@ const ListHandler = () => {
           {list.map((item) => (
             <Reorder.Item value={item} key={item.taskid} axis="y">
               <Tasklist
+                TaskUpdated={TaskUpdated}
+                setTaskUpdated={setTaskUpdated}
                 TaskName={item.taskname}
                 Status={item.status}
-                Serial={item.Serial}
+                taskid={item.taskid}
                 setlistSpread={Setlistview}
                 listSpread={listview}
                 Description={item.description}

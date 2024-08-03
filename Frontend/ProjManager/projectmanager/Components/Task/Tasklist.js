@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import Details from "./Details";
 
 const Tasklist = ({
-  Serial,
+  TaskUpdated,
+  setTaskUpdated,
+  taskid,
   TaskName,
   Status,
   Description,
@@ -87,12 +89,14 @@ const Tasklist = ({
         <Details
           TaskName={TaskName}
           Status={Status}
-          Serial={Serial}
+          Serial={taskid}
           Description={Description}
           setlistSpread={SetTemView}
           listSpread={TempView}
           AllViewHandler={setlistSpread}
           Color={randomColor}
+          setTaskUpdated={setTaskUpdated}
+          TaskUpdated={TaskUpdated}
         />
       </div>
     </>

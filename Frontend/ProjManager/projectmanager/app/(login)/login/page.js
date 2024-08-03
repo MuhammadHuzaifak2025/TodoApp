@@ -22,11 +22,12 @@ const AuthPage = ({}) => {
         {
           username: email,
           password: password,
-        }
+        },
+        { withCredentials: true }
       );
       SetisLogin(true);
       const token = response.data.data.token;
-      document.cookie = `auth-token=${token}; path=/;`;
+      // document.cookie = `auth-token=${token}; path=/;`;
     } catch (error) {
       SetIncorrectPass(true);
       setEmail("");

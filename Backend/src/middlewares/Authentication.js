@@ -4,10 +4,12 @@ import ApiError from "../utils/ErrorHandling.js";
 
 const Authenticate_Header = async (req, res, next) => {
   try {
-    const token = req.header("auth-token");
-    console.log(token)
+    const token = req.cookies["auth-token"];
+
     if (!token) {
-      throw new ApiError("Token not provided", 401);
+
+      token = req.header("auth-token");
+      if (!token) throw new ApiError("Token not provided", 401);
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

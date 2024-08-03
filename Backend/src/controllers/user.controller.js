@@ -50,19 +50,20 @@ const GetListUser = asynchandler(async (req, res, next) => {
 const GetUserById = asynchandler(async (req, res, next) => {
   const id = req.user_id;
   const user = await User.findOne({
-    where: { id: id },
-    attributes: { exclude: [("password", "createdAt", "updatedAt")] },
+    where: { id: req.user_id },
   });
+  console.log(user);
   if (!user) {
     return next(new ApiError(404, "User not found"));
   }
+  user.password = undefined;
   const Resp = new ApiResponse(200, user, "User found");
   res.status(200).json(Resp);
 });
 
 const Authenticate_User = asynchandler(async (req, res, next) => {
-  const token = req.header("auth-token");
-  console.log(token)
+  const token = req.cookies["auth-token"];
+  console.log(token);
   if (token) {
     let decoded;
     try {
@@ -86,6 +87,12 @@ const Authenticate_User = asynchandler(async (req, res, next) => {
   }
   const loggedin = await bcrypt.compare(password, User_Obj.password);
   if (loggedin) {
+    res.cookie("auth-token", GenerateToken(User_Obj), {
+      httpOnly: true,
+      secure: true, // Use secure cookies in production
+      maxAge: 3600 * 1000, // 1 hour
+      path: "/",
+    });
     const Resp = new ApiResponse(
       200,
       { username: User_Obj.username, token: GenerateToken(User_Obj) },

@@ -17,23 +17,18 @@ const Herosection = ({ User }) => {
     const getUserDetails = async () => {
       const authToken = getCookie("auth-token"); // Use the correct cookie name
 
-      if (authToken) {
-        try {
-          const resp = await axios.get("http://localhost:8000/api/v1/user/", {
-            headers: {
-              "auth-token": authToken, // Adjust header if necessary
-            },
-          });
-          console.log(resp.data.data);
-          SetUser(resp.data.data.firstName + " " + resp.data.data.lastName); // Assuming response contains userName
-        } catch (error) {
-          console.error(
-            "Error fetching data:",
-            error.response ? error.response.data : error.message
-          );
-        }
-      } else {
-        console.log("No auth-token cookie found");
+      try {
+        const resp = await axios.get("http://localhost:8000/api/v1/user", {
+          withCredentials: true,
+        });
+        console.log(resp.data.data);
+        SetUser(resp.data.data.firstName + " " + resp.data.data.lastName); // Assuming response contains userName
+      } catch (error) {
+        console.log(error);
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
