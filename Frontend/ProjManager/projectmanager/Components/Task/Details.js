@@ -14,8 +14,8 @@ const Details = ({
   setlistSpread,
   AllViewHandler,
   Color,
-  Estimated_Time,
-  Due_date,
+  EstimationDate,
+  Due_Date,
 }) => {
   const Spread = () => {
     setlistSpread(true);
@@ -26,18 +26,37 @@ const Details = ({
   const [taskname, SetTaskName] = useState(TaskName);
   const [description, SetDescription] = useState(Description);
   const [status, SetStatus] = useState(Status);
-  const [duedate, SetDueDate] = useState(Due_date);
-  const [estimatedtime, SetEstimatedTime] = useState(Estimated_Time);
+  const [duedate, SetDueDate] = useState(Due_Date);
+  const [estimatedtime, SetEstimatedTime] = useState(EstimationDate);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const Editable = () => {
     SetEditBool(true);
+  };
+
+  const DeleteTask = async () => {
+    setIsDeleting(true); // Start the delete animation
+    try {
+      const resp = await axios.delete(
+        `http://localhost:8000/api/v1/tasks/${Serial}`,
+        { withCredentials: true }
+      );
+      if (resp.status === 200) {
+        setTaskUpdated(!TaskUpdated);
+        setTimeout(() => {
+          Spread();
+        }, 1100);
+      }
+      console.log(resp);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const SaveChanges = async (event) => {
     event.preventDefault();
     SetEditBool(false);
 
-    
     try {
       const resp = await axios.put(
         `http://localhost:8000/api/v1/tasks/${Serial}`,
@@ -71,8 +90,13 @@ const Details = ({
     <motion.div
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      className="border-4 rounded-2xl max-h-fit mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin"
+      className={`border-4 rounded-2xl max-h-fit mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin ${
+        isDeleting ? "delete-animation" : ""
+      }`}
       style={{ borderColor: Color }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: isDeleting ? 0 : 1, x: isDeleting ? 300 : 0 }}
+      transition={{ duration: 2 }}
     >
       <form onSubmit={SaveChanges}>
         <div className="flex items-center justify-between mb-2">
@@ -97,19 +121,35 @@ const Details = ({
               {" " + status}
             </span>
             <span className={`${EditBool ? "text-sm " : "hidden"}`}>
-              <input
-                className="bg-black w-20 text-sm rounded-xl h-6 items-center focus:border-blue-500"
-                type="text"
+              <select
                 value={status}
                 onChange={(e) => SetStatus(e.target.value)}
-              />
+                className="bg-black w-20 text-sm rounded-xl h-6 items-center focus:border-blue-500"
+                required
+              >
+                <option value="">Select status</option>
+                <option value="pending">Pending</option>
+                <option value="complete">Complete</option>
+                <option value="expired">expired</option>
+              </select>
             </span>
           </h3>
         </div>
         <div>
           <div className="flex justify-start">
             <p className="p-0 m-0 pl-4">Estimated Time: {estimatedtime} </p>
-            <p className="p-0 m-0 pl-4">Due Date: {duedate}</p>
+            <p className="p-0 m-0 pl-4">Due Date: </p>
+            <span className={`${!EditBool? "flex text-white":"hidden"}`}>{duedate}</span>
+            <input
+              type="date"
+              value={duedate}
+              onChange={(e) => SetDueDate(e.target.value)}
+              className={`${
+                EditBool
+                  ? "border border-gray-300 bg-black  rounded-lg focus:outline-none focus:border-blue-500 mb-1 ml-2 text-white"
+                  : "hidden"
+              }`}
+            />
           </div>
           <div className="text-left m-3 pt-3 font-semibold h-36 overflow-y-hidden overflow-x-hidden pr-3 scrollbar-thin">
             <span className={`${EditBool ? "hidden" : ""}`}>
@@ -150,6 +190,7 @@ const Details = ({
           </button>
           <button
             type="button"
+            onClick={DeleteTask}
             className="w-2/12 mr-3 border-2 border-[#c5416d] pr-4 pl-4 pt-1 text-xl pb-1 rounded-md text-center font-bold hover:bg-[#c5416d]"
           >
             Delete

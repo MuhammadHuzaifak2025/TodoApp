@@ -11,6 +11,8 @@ const Tasklist = ({
   Description,
   setlistSpread,
   listSpread,
+  Due_Date,
+  EstimationDate
 }) => {
   const [randomColor, setRandomColor] = useState("#");
 

@@ -3,7 +3,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import AllCaughtUp from "./AllCaughtup";
 import Tasklist from "./Tasklist";
-import TempData from "./TempData";
 import { Reorder, motion, useScroll } from "framer-motion";
 import Filter from "./Filter";
 import axios from "axios";
@@ -28,6 +27,9 @@ const ListHandler = () => {
             withCredentials: true, // Include cookies with the request
           }
         );
+        if (tasklist.data.length === 0) {
+          SetallCaughtUp(true);
+        }
         setTaskUpdated(false);
         console.log(tasklist.data);
         // console.log(TempData);
@@ -60,6 +62,8 @@ const ListHandler = () => {
                 setlistSpread={Setlistview}
                 listSpread={listview}
                 Description={item.description}
+                Due_Date={item.duedate}
+                EstimationDate={item.estimationdate}
                 className=""
               />
             </Reorder.Item>
