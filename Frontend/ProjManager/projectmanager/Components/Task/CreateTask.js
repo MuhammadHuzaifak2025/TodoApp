@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import useTaskUpdate from "@/context/Taskupdates";
 const CreateTask = ({ onTaskCreated }) => {
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
@@ -9,6 +9,7 @@ const CreateTask = ({ onTaskCreated }) => {
   const [estimatedTime, setEstimatedTime] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { setTaskUpdated } = useTaskUpdate();
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ const CreateTask = ({ onTaskCreated }) => {
         {
           TaskName: taskName,
           TaskDetails: description,
-          Status: status,
+          Status: "pending",
           DueDate: dueDate,
           EstimationDate: estimatedTime,
         },
@@ -32,6 +33,7 @@ const CreateTask = ({ onTaskCreated }) => {
         setStatus("");
         setDueDate("");
         setEstimatedTime("");
+        setTaskUpdated(true);
       }
     } catch (error) {
       setError("Error creating task. Please try again.");
@@ -74,20 +76,7 @@ const CreateTask = ({ onTaskCreated }) => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Status</label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-            required
-          >
-            <option value="">Select status</option>
-            <option value="pending">Pending</option>
-            <option value="complete">Complete</option>
-            <option value="expired">expired</option>
-          </select>
-        </div>
+
         <div className="mb-4 flex space-x-8">
           <div className="w-1/2">
             <label className="block text-gray-700 font-medium mb-2">

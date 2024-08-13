@@ -6,8 +6,10 @@ import {
   Authenticate_User,
   UpdateUser,
   DeleteUser,
+  LogoutUser
 } from "../controllers/user.controller.js";
 import Authenticate_Header from "../middlewares/Authentication.js";
+import User from "../models/User.models.js";
 
 const UserRouter = Router();
 
@@ -17,5 +19,6 @@ UserRouter.route("/user").post(CreateUser);
 UserRouter.route("/user/login").post(Authenticate_User);
 UserRouter.route("/user/").put(Authenticate_Header, UpdateUser);
 UserRouter.route("/user/").delete(Authenticate_Header, DeleteUser);
+UserRouter.route("/user/logout").get(Authenticate_Header, LogoutUser);
 
 export default UserRouter;

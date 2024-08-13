@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import CreateTaskPopup from "./CreateTaskPopup";
 import { useState } from "react";
+import usetaskupdate from "@/context/Taskupdates";
 
 const AllCaughtUp = ({ onTaskCreated }) => {
   const [taskCreated, setTaskCreated] = useState(false);
-
   return (
     <div className="flex flex-col justify-center items-center mt-[15%] font-semibold text-4xl">
       <div className="flex">

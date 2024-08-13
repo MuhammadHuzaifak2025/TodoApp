@@ -135,6 +135,18 @@ const DeleteUser = asynchandler(async (req, res, next) => {
   res.status(200).json(Resp);
 });
 
+const LogoutUser = asynchandler(async (req, res, next) => {
+  try {
+    res.cookie("auth-token", "", {
+      httpOnly: true,
+      secure: true,
+      maxAge: 0,
+    });
+    res.status(200).json({ message: "User Logged Out" });
+  } catch (error) {
+    throw new ApiError(500, "Error Logging Out");
+  }
+});
 export {
   Authenticate_User,
   CreateUser,
@@ -142,4 +154,5 @@ export {
   GetUserById,
   UpdateUser,
   DeleteUser,
+  LogoutUser,
 };

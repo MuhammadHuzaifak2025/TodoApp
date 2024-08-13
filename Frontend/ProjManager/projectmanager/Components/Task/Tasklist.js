@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Details from "./Details";
 
 const Tasklist = ({
-  TaskUpdated,
   setTaskUpdated,
   taskid,
   TaskName,
@@ -98,7 +97,6 @@ const Tasklist = ({
           AllViewHandler={setlistSpread}
           Color={randomColor}
           setTaskUpdated={setTaskUpdated}
-          TaskUpdated={TaskUpdated}
         />
       </div>
     </>

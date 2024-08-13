@@ -7,13 +7,15 @@ import { Reorder, motion, useScroll } from "framer-motion";
 import Filter from "./Filter";
 import axios from "axios";
 import getCookie from "@/app/api/getcookie";
+import { TaskProvider } from "@/context/Taskupdates";
+import useTaskUpdate from "@/context/Taskupdates";
 
 const ListHandler = () => {
   const { scrollYProgress } = useScroll();
   const [allCaughtUp, SetallCaughtUp] = useState(false);
   const [listview, Setlistview] = useState(true);
   const [list, setList] = useState([]);
-  const [TaskUpdated, setTaskUpdated] = useState(true);
+  const { taskUpdated, setTaskUpdated } = useTaskUpdate();
 
   // const update_data = () => {}
   useEffect(() => {
@@ -39,38 +41,48 @@ const ListHandler = () => {
       }
     };
     getTask();
-  }, [TaskUpdated]);
+  }, [taskUpdated]);
 
   return (
     <>
-      <div className={`${allCaughtUp ? "block" : "hidden"}`}>
-        <AllCaughtUp />
-      </div>
-      <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="-mt-3 h-[420px] overflow-y-auto pr-5 scrollbar-thin scrollbar-thumb-[#757474] scrollbar-track-[#3d3d3d] "
-      >
-        <Reorder.Group values={list} onReorder={setList}>
-          {list.map((item) => (
-            <Reorder.Item value={item} key={item.taskid} axis="y">
-              <Tasklist
-                TaskUpdated={TaskUpdated}
-                setTaskUpdated={setTaskUpdated}
-                TaskName={item.taskname}
-                Status={item.status}
-                taskid={item.taskid}
-                setlistSpread={Setlistview}
-                listSpread={listview}
-                Description={item.description}
-                Due_Date={item.duedate}
-                EstimationDate={item.estimationdate}
-                className=""
-              />
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
-      </motion.div>
-      <Filter />
+      <TaskProvider>
+        <div className={`${allCaughtUp ? "block" : "hidden"}`}>
+          <AllCaughtUp />
+        </div>
+
+        <motion.div
+          initial={{ scaleX: 0.01 }}
+          animate={{ scaleX: scrollYProgress }}
+          transition={{ duration: 0.5 }}
+          className={`${
+            !allCaughtUp
+              ? "-mt-3 h-[420px] overflow-y-auto pr-5 scrollbar-thin scrollbar-thumb-[#757474] scrollbar-track-[#3d3d3d]"
+              : "hidden"
+          }`}
+        >
+          <Reorder.Group values={list} onReorder={setList}>
+            {list.map((item) => (
+              <Reorder.Item value={item} key={item.taskid} axis="y">
+                <Tasklist
+                  setTaskUpdated={setTaskUpdated}
+                  TaskName={item.taskname}
+                  Status={item.status}
+                  taskid={item.taskid}
+                  setlistSpread={Setlistview}
+                  listSpread={listview}
+                  Description={item.description}
+                  Due_Date={item.duedate}
+                  EstimationDate={item.estimationdate}
+                  className=""
+                />
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+        </motion.div>
+        <div className={`${allCaughtUp ? "mt-32" : ""}`}>
+          <Filter />
+        </div>
+      </TaskProvider>
     </>
   );
 };

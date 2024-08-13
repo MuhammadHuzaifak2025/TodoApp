@@ -2,10 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-
+import useTaskUpdate from "@/context/Taskupdates";
 const Details = ({
-  TaskUpdated,
-  setTaskUpdated,
   taskid,
   TaskName,
   Serial,
@@ -29,7 +27,7 @@ const Details = ({
   const [duedate, SetDueDate] = useState(Due_Date);
   const [estimatedtime, SetEstimatedTime] = useState(EstimationDate);
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const { setTaskUpdated } = useTaskUpdate;
   const Editable = () => {
     SetEditBool(true);
   };
@@ -42,7 +40,7 @@ const Details = ({
         { withCredentials: true }
       );
       if (resp.status === 200) {
-        setTaskUpdated(!TaskUpdated);
+        setTaskUpdated(true);
         setTimeout(() => {
           Spread();
         }, 1100);
@@ -70,7 +68,7 @@ const Details = ({
         { withCredentials: true }
       );
       if (resp.status === 200) {
-        setTaskUpdated(!TaskUpdated);
+        setTaskUpdated(true);
       }
       console.log(resp);
     } catch (error) {
@@ -139,7 +137,9 @@ const Details = ({
           <div className="flex justify-start">
             <p className="p-0 m-0 pl-4">Estimated Time: {estimatedtime} </p>
             <p className="p-0 m-0 pl-4">Due Date: </p>
-            <span className={`${!EditBool? "flex text-white":"hidden"}`}>{duedate}</span>
+            <span className={`${!EditBool ? "flex text-white" : "hidden"}`}>
+              {duedate}
+            </span>
             <input
               type="date"
               value={duedate}
@@ -194,12 +194,6 @@ const Details = ({
             className="w-2/12 mr-3 border-2 border-[#c5416d] pr-4 pl-4 pt-1 text-xl pb-1 rounded-md text-center font-bold hover:bg-[#c5416d]"
           >
             Delete
-          </button>
-          <button
-            type="button"
-            className="w-3/12 mr-3 border-2 border-[#5dbea3] text-xl pr-4 pl-4 pt-1 pb-1 rounded-md text-center font-bold hover:bg-[#5dbea3]"
-          >
-            Mark As Done
           </button>
         </div>
       </form>
