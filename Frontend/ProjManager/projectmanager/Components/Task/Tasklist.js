@@ -97,6 +97,7 @@ const Tasklist = ({
           AllViewHandler={setlistSpread}
           Color={randomColor}
           setTaskUpdated={setTaskUpdated}
+          Due_Date={Due_Date}
         />
       </div>
     </>

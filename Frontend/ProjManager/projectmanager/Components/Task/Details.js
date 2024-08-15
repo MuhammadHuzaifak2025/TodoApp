@@ -1,8 +1,9 @@
-"use client";
+  "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import useTaskUpdate from "@/context/Taskupdates";
+
 const Details = ({
   taskid,
   TaskName,
@@ -27,23 +28,23 @@ const Details = ({
   const [duedate, SetDueDate] = useState(Due_Date);
   const [estimatedtime, SetEstimatedTime] = useState(EstimationDate);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { setTaskUpdated } = useTaskUpdate;
+  const { updatetask } = useTaskUpdate();
   const Editable = () => {
     SetEditBool(true);
   };
 
   const DeleteTask = async () => {
-    setIsDeleting(true); // Start the delete animation
+    setIsDeleting(true);
     try {
       const resp = await axios.delete(
         `http://localhost:8000/api/v1/tasks/${Serial}`,
         { withCredentials: true }
       );
       if (resp.status === 200) {
-        setTaskUpdated(true);
         setTimeout(() => {
           Spread();
-        }, 1100);
+          updatetask(true);
+        }, 800);
       }
       console.log(resp);
     } catch (error) {
@@ -68,7 +69,7 @@ const Details = ({
         { withCredentials: true }
       );
       if (resp.status === 200) {
-        setTaskUpdated(true);
+        updatetask(true);
       }
       console.log(resp);
     } catch (error) {
@@ -77,8 +78,8 @@ const Details = ({
         TaskName,
         Description,
         Status,
-        Due_date,
-        Estimated_Time,
+        duedate,
+        estimatedtime,
       });
       console.log(error);
     }
@@ -89,12 +90,12 @@ const Details = ({
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       className={`border-4 rounded-2xl max-h-fit mx-auto p-4 my-4 overflow-y-hidden overflow-x-hidden scrollbar-thin ${
-        isDeleting ? "delete-animation" : ""
+        isDeleting ? "delete-animation overflow-hidden" : ""
       }`}
       style={{ borderColor: Color }}
       initial={{ opacity: 1 }}
       animate={{ opacity: isDeleting ? 0 : 1, x: isDeleting ? 300 : 0 }}
-      transition={{ duration: 2 }}
+      transition={{ duration: 0.5 }}
     >
       <form onSubmit={SaveChanges}>
         <div className="flex items-center justify-between mb-2">
@@ -135,10 +136,27 @@ const Details = ({
         </div>
         <div>
           <div className="flex justify-start">
-            <p className="p-0 m-0 pl-4">Estimated Time: {estimatedtime} </p>
+            <p className="p-0 m-0 pl-4">Estimated Time: </p>
+            <span
+              className={`${!EditBool ? "flex text-white pl-4" : "hidden"}`}
+            >
+              {new Date(duedate).toLocaleDateString()}
+            </span>
+            <input
+              type="date"
+              value={estimatedtime}
+              onChange={(e) => SetEstimatedTime(e.target.value)}
+              className={`${
+                EditBool
+                  ? "border border-gray-300 bg-black  rounded-lg focus:outline-none focus:border-blue-500 mb-1 ml-2 text-white"
+                  : "hidden"
+              }`}
+            />
             <p className="p-0 m-0 pl-4">Due Date: </p>
-            <span className={`${!EditBool ? "flex text-white" : "hidden"}`}>
-              {duedate}
+            <span
+              className={`${!EditBool ? "flex text-white pl-4" : "hidden"}`}
+            >
+              {new Date(estimatedtime).toLocaleDateString()}
             </span>
             <input
               type="date"

@@ -9,7 +9,7 @@ const CreateTask = ({ onTaskCreated }) => {
   const [estimatedTime, setEstimatedTime] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { setTaskUpdated } = useTaskUpdate();
+  const { updatetask } = useTaskUpdate();
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const CreateTask = ({ onTaskCreated }) => {
         setStatus("");
         setDueDate("");
         setEstimatedTime("");
-        setTaskUpdated(true);
+        updatetask(true);
       }
     } catch (error) {
       setError("Error creating task. Please try again.");

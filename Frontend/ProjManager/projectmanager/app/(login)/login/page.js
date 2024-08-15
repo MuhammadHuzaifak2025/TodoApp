@@ -107,7 +107,7 @@ const AuthPage = ({}) => {
                 className="bg-gray-100 p-3 rounded border focus:outline-none focus:border-blue-500 text-black"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value )}
               />
             </div>
             <div className="flex items-center justify-between">

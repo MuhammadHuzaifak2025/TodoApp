@@ -15,12 +15,17 @@ const ListHandler = () => {
   const [allCaughtUp, SetallCaughtUp] = useState(false);
   const [listview, Setlistview] = useState(true);
   const [list, setList] = useState([]);
-  const { taskUpdated, setTaskUpdated } = useTaskUpdate();
+  const [taskUpdated, setTaskUpdated] = useState();
 
+  const updatetask = (value) => {
+    console.log("The Task is Updated");
+    setTaskUpdated(value);
+  };
   // const update_data = () => {}
   useEffect(() => {
     const getTask = async () => {
       try {
+        Setlistview(true);
         const token = getCookie("auth-token");
         const tasklist = await axios.get(
           "http://localhost:8000/api/v1/tasks/",
@@ -45,7 +50,7 @@ const ListHandler = () => {
 
   return (
     <>
-      <TaskProvider>
+      <TaskProvider value={{ taskUpdated, updatetask }}>
         <div className={`${allCaughtUp ? "block" : "hidden"}`}>
           <AllCaughtUp />
         </div>
